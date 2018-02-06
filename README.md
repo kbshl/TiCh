@@ -43,7 +43,8 @@ Create a tich.cfg file in the Titanium project folder as follows:
                 "com.domain.BUILD_DESC": "The build at $DATETIME$",
                 "com.domain.BUILD_NUMBER": "$TIME_EPOCH$",
                 "com.domain.APP_VERSION_DESC": "Version $tiapp.version$",
-                "com.domain.moreinfo": "Visit $tiapp.url for more details"
+                "com.domain.moreinfo": "Visit $tiapp.url$ for more details",
+                "com.domain.defaultunit": "Currently default system unit is $tiappProperty.ti.ui.defaultunit$"
             },
             "raw": {
               "/ti:app/android/manifest/@package": "$tiapp.id$",
@@ -79,6 +80,7 @@ This allows you to use dynamic content in your replacement values. Special dynam
 * `$DATETIME$` - Both of them, including timezone. For example `Thu Mar 05 2015 17:03:07 GMT-0500 (EST)`
 * `$TIME_EPOCH$` - The number of seconds since the unix epoch. Useful for increasing build numbers.
 * `$tiapp.property$` - Substitutes the current value of the tiapp.xml property's value. For example, `$tiapp.version$` would substitute the current value of the `<version>` element from tiapp.xml
+* `$tiappProperty.property$` - Substitutes the current value of tiapp.xml custom property's value. For example, `$tiappProperty.ti.ui.defaultunit$` would substitute the current value of the `<property name="ti.ui.defaultunit">` element from tiapp.xml.
 
 ##Raw xpath Substitutions
 
