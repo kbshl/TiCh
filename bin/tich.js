@@ -3,7 +3,7 @@
 var program = require('commander'),
     chalk = require('chalk'),
     updateNotifier = require('update-notifier'),
-    fs = require("fs"),
+    fs = require('fs'),
     tiappxml = require('tiapp.xml'),
     pkg = require('../package.json'),
     xpath = require('xpath')
@@ -35,37 +35,51 @@ function tich() {
 
         if (!name) {
             if (fs.existsSync('./app/config.json')) {
-                var alloyCfg = JSON.parse(fs.readFileSync("./app/config.json", "utf-8"));
+                
+                var alloyCfg = JSON.parse(fs.readFileSync('./app/config.json', 'utf-8'));
+                
                 if (alloyCfg.global.theme) {
                     console.log('\nFound a theme in config.json, trying ' + chalk.cyan(alloyCfg.global.theme));
                     select(alloyCfg.global.theme);
-                } else {
+                } 
+                else {
                     status();
                 }
             }
-        } else {
+        } 
+        else {
             // find the config name specified
             cfg.configs.forEach(function(config) {
 
                 if (config.name === name) {
+                    
                     console.log('\nFound a config for ' + chalk.cyan(config.name) + '\n');
+                    
                     if (fs.existsSync('./app/config.json')) {
-                        var alloyCfg = JSON.parse(fs.readFileSync("./app/config.json", "utf-8"));
+                        
+                        var alloyCfg = JSON.parse(fs.readFileSync('./app/config.json', 'utf-8'));
+                        
                         if (alloyCfg.global.theme) {
+                          
                           var original = alloyCfg.global.theme;
+                          
                           alloyCfg.global.theme = name;
-                          fs.writeFile("./app/config.json", JSON.stringify(alloyCfg, null, 2), function (err) {
+                          
+                          fs.writeFile('./app/config.json', JSON.stringify(alloyCfg, null, 2), function (err) {
                               if (err) return console.log(err);
                               console.log('\nChanging theme value in config.json from ' + chalk.cyan(original) + ' to ' + chalk.cyan(name));
                           });
                         }
                     }
 
+                    // settings without properties and raw
                     for (var setting in config.settings) {
 
-                        if (!config.settings.hasOwnProperty(setting)) continue;
+                        if (!config.settings.hasOwnProperty(setting)) {
+                            continue;
+                        }
 
-                        if (setting != "properties" && setting != "raw") {
+                        if (setting !== 'properties' && setting !== 'raw') {
 
 							var now = new Date();
                             var replaceWith = config.settings[setting]
@@ -88,7 +102,9 @@ function tich() {
 
                     }
 
+                    // settings.properties
                     if (config.settings.properties) {
+                        
                         for (var property in config.settings.properties) {
 
                             if (!config.settings.properties.hasOwnProperty(property)) continue;
@@ -113,19 +129,25 @@ function tich() {
                         }
                     }
 
+                    // settings.raw
                     if (config.settings.raw) {
+                        
                         var doc = tiapp.doc;
                         var select = xpath.useNamespaces({
-                            "ti": "http://ti.appcelerator.org",
-                            "android": "http://schemas.android.com/apk/res/android"
+                            'ti': 'http://ti.appcelerator.org',
+                            'android': 'http://schemas.android.com/apk/res/android'
                         });
+                        
                         for (var path in config.settings.raw) {
 
-                            if (!config.settings.raw.hasOwnProperty(path)) continue;
+                            if (!config.settings.raw.hasOwnProperty(path)) {
+                                continue;
+                            }
 
                             var node = select(path, doc, true);
+                            
                             if (!node) {
-                                console.log(chalk.yellow('Could not find ' + path + ", skipping"));
+                                console.log(chalk.yellow('Could not find ' + path + ', skipping'));
                                 continue;
                             }
 
@@ -156,20 +178,24 @@ function tich() {
                         }
                     }
 
-                    if (fs.existsSync("./app/themes/" + name + "/assets/iphone/DefaultIcon.png")) {
+                    if (fs.existsSync('./app/themes/' + name + '/assets/iphone/DefaultIcon.png')) {
+                        
                         // if it exists in the themes folder, in a platform subfolder
                         console.log(chalk.blue('Found a DefaultIcon.png in the theme\'s assets/iphone folder\n'));
-                        copyFile("./app/themes/" + name + "/assets/iphone/DefaultIcon.png", "./DefaultIcon.png")
-                    } else if (fs.existsSync("./app/themes/" + name + "/DefaultIcon.png")) {
+                        
+                        copyFile('./app/themes/' + name + '/assets/iphone/DefaultIcon.png', './DefaultIcon.png');
+                    } 
+                    else if (fs.existsSync('./app/themes/' + name + '/DefaultIcon.png')) {
+                        
                         // if it exists in the top level theme folder
                         console.log(chalk.blue('Found a DefaultIcon.png in the theme folder\n'));
-                        copyFile("./app/themes/" + name + "/" + "/DefaultIcon.png", "./DefaultIcon.png")
+                        
+                        copyFile('./app/themes/' + name + '/' + '/DefaultIcon.png', './DefaultIcon.png');
                     }
 
                     console.log(chalk.green('\n' + outfilename + ' updated\n'));
 
                     tiapp.write(outfilename);
-
                 }
             });
 
@@ -188,7 +214,7 @@ function tich() {
         .option('-i, --in <path>', 'Specifies the file to read (default: tiapp.xml)')
         .option('-o, --out <path>', 'Specifies the file to write (default: tiapp.xml)')
         .option('-s, --select <name>', 'Updates TiApp.xml to config specified by <name>')
-        //.option('-c, --capture <name>', "Stores the current values of TiApp.xml id, name, version as <name> ")
+        //.option('-c, --capture <name>', 'Stores the current values of TiApp.xml id, name, version as <name> ')
 
     program.parse(process.argv);
 
@@ -205,7 +231,7 @@ function tich() {
     });
 
     // read in our config
-    var cfg = JSON.parse(fs.readFileSync(cfgfile, "utf-8"));
+    var cfg = JSON.parse(fs.readFileSync(cfgfile, 'utf-8'));
 
     // read in the app config
     var tiapp = tiappxml.load(infile);
@@ -219,22 +245,25 @@ function tich() {
     // LIST command - show the list of config items
     if (program.list) {
         cfg.configs.forEach(function(config) {
-            console.log(chalk.cyan(config.name + ' - ' + chalk.grey('Name: ') + config.settings.name + ' ' + chalk.grey('Id: ') + config.settings.id + ' ' + chalk.grey('Version: ') + config.settings.version));
+            console.log(chalk.cyan(
+                config.name 
+                + ' - ' 
+                + chalk.grey('Name: ') + config.settings.name + ' ' 
+                + chalk.grey('Id: ') + config.settings.id + ' ' 
+                + chalk.grey('Version: ') + config.settings.version
+            ));
         });
-
+    } 
     // select command, select based on the arg passed
     } else if (program.select) {
 
         select(program.select, outfile);
 
     // capture command - this will store the current TiApp.xml settings
-    } else if (program.capture) {
+    else if (program.capture) {
         // coming soon!
-
-    } else {
-
-        status();
-
     }
-
+    else {
+        status();
+    }
 }
