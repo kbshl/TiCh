@@ -43,7 +43,7 @@ Create a tich.cfg file in the Titanium project folder as follows:
                 "com.domain.BUILD_DESC": "The build at $DATETIME$",
                 "com.domain.BUILD_NUMBER": "$TIME_EPOCH$",
                 "com.domain.APP_VERSION_DESC": "Version $tiapp.version$",
-                "com.domain.moreinfo": "Visit $tiapp.url for more details"
+                "com.domain.moreinfo": "Visit $tiapp.url$ for more details",
             },
             "raw": {
               "/ti:app/android/manifest/@package": "$tiapp.id$",
