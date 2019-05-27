@@ -1,18 +1,14 @@
 {
   "name": "tich",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "TiCh (TiChange) - allows you to switch App configurations via the CLI.",
   "main": "index.js",
   "bin": {
-    "tich": "./bin/tich.js"
+    "tich": "./index.js"
   },
   "files": [
-    "bin",
     "index.js"
   ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jasonkneen/tich"
@@ -31,11 +27,17 @@
   },
   "homepage": "https://github.com/jasonkneen/tich",
   "dependencies": {
-    "chalk": "0.5.1",
-    "commander": "2.6.0",
-    "lodash": "4.5.0",
+    "chalk": "2.4.2",
+    "commander": "2.20.0",
+    "lodash": "4.17.11",
     "tiapp.xml": "0.2.2",
-    "update-notifier": "0.2.2",
-    "xpath": "0.0.9"
+    "update-notifier": "3.0.0",
+    "xpath": "0.0.27"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "package-lock": false,
+    "save-exact": true,
+    "tag": "next"
   }
 }
